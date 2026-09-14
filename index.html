@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f4ee">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>日本語學習導航</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a href="#" class="brand"><span>日</span> 日本語學習導航</a>
+  <button id="menuBtn" class="icon-btn" aria-label="選單">☰</button>
+  <nav id="nav">
+    <a href="#home">首頁</a><a href="#roadmap">學習地圖</a>
+    <a href="#resources">資源庫</a><a href="#exams">考試</a>
+  </nav>
+</header>
+
+<main>
+<section id="home" class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">JAPANESE LEARNING NAVIGATOR</div>
+    <h1>找到適合你的<br><em>日語學習方式。</em></h1>
+    <p>從五十音到 N1，從日常會話到日本留學，把分散的學習資源整理成一條清楚的路。</p>
+    <div class="actions">
+      <button class="primary" id="startBtn">開始我的學習之旅　→</button>
+      <a class="secondary" href="#resources">瀏覽資源</a>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="sun"></div><div class="ring r1"></div><div class="ring r2"></div>
+    <span class="jp">日本語を学ぶ</span>
+    <b class="bubble b1">五十音</b><b class="bubble b2">JLPT N2</b><b class="bubble b3">日本留學</b>
+  </div>
+</section>
+
+<section class="section white">
+  <div class="heading"><div class="eyebrow">START HERE</div><h2>你現在想學什麼？</h2><p>選一個方向，快速找到下一步。</p></div>
+  <div class="choices">
+    <button data-topic="日語入門">🌱<strong>日語入門</strong><small>五十音・基礎文法</small></button>
+    <button data-topic="JLPT">📖<strong>準備 JLPT</strong><small>N5 ～ N1</small></button>
+    <button data-topic="聽力">🎧<strong>聽力訓練</strong><small>Podcast・影片</small></button>
+    <button data-topic="會話">🗣️<strong>日常會話</strong><small>實用表達・口說</small></button>
+    <button data-topic="EJU">🎓<strong>EJU／升學</strong><small>日本大學・小論文</small></button>
+    <button data-topic="留學">🇯🇵<strong>日本留學</strong><small>大學・語言學校</small></button>
+  </div>
+</section>
+
+<section id="roadmap" class="section">
+  <div class="heading"><div class="eyebrow">LEARNING ROADMAP</div><h2>日語學習路線</h2></div>
+  <div class="road">
+    <div><i>01</i><strong>基礎</strong><small>五十音・發音</small></div><span>→</span>
+    <div><i>02</i><strong>N5 ～ N4</strong><small>生活日語</small></div><span>→</span>
+    <div><i>03</i><strong>N3 ～ N2</strong><small>閱讀・新聞</small></div><span>→</span>
+    <div><i>04</i><strong>N1＋</strong><small>學術・商務</small></div>
+  </div>
+</section>
+
+<section id="resources" class="section white">
+  <div class="heading row"><div><div class="eyebrow">RESOURCE LIBRARY</div><h2>精選學習資源</h2></div><button id="moreBtn" class="outline">更多</button></div>
+  <div class="resources">
+    <article><label>免費</label><span>N3 ～ N2</span><h3>新聞與閱讀</h3><p>用簡單日語新聞培養閱讀與詞彙能力。</p><footer>📖 閱讀　 🎧 聽力</footer></article>
+    <article><label>影片</label><span>N5 ～ N1</span><h3>YouTube 日語教學</h3><p>依程度與目標尋找適合的影片。</p><footer>🎬 影片　 🗣️ 會話</footer></article>
+    <article><label>Podcast</label><span>N3 ～ N1</span><h3>日語 Podcast</h3><p>利用零碎時間接觸自然日語。</p><footer>🎧 聽力　 💬 會話</footer></article>
+  </div>
+  <div id="extra" class="resources extra">
+    <article><label>教材</label><span>N4 ～ N2</span><h3>文法與單字</h3><p>整理不同程度的教材與使用方法。</p></article>
+    <article><label>考試</label><span>N2 ～ N1</span><h3>BJT 商務日語</h3><p>敬語、商務詞彙與職場溝通。</p></article>
+  </div>
+</section>
+
+<section id="exams" class="section features">
+  <article><b>📚</b><div class="eyebrow">EXAMS</div><h2>JLPT・EJU・BJT</h2><p>從「我要考哪個」到「我要怎麼準備」。</p></article>
+  <article class="dark"><b>🇯🇵</b><div class="eyebrow">STUDY IN JAPAN</div><h2>想去日本讀書？</h2><p>把 EJU、申請與留學準備整理成一條路線。</p></article>
+</section>
+
+<section class="cta"><div><div class="eyebrow">YOUR JAPANESE JOURNEY</div><h2>從今天開始，找到自己的日本語之路。</h2></div><button id="ctaBtn" class="primary">開始探索 →</button></section>
+</main>
+
+<footer class="site-footer">日本語學習導航<br><small>Learning Japanese, one step at a time.</small></footer>
+
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="backdrop"></div><div class="dialog">
+    <button id="close" class="close">×</button>
+    <div class="eyebrow">FIND YOUR PATH</div><h2>你的日語程度？</h2><p>先選最接近你的程度。</p>
+    <div class="levels">
+      <button>🌱 完全初學</button><button>📘 N5 ～ N4</button>
+      <button>📖 N3</button><button>🎯 N2</button><button>🏆 N1</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
