@@ -1,0 +1,661 @@
+/* ==========================================================
+   全站共用樣式 — 藍染 × 朱印 主題
+   色彩系統：
+   --indigo       頁面底色（藍染，深靛藍）
+   --indigo-mid   次要底色 / hover 用的中間藍
+   --paper        卡片底色（米白，像和紙）
+   --ink          卡片內文字主色（墨色）
+   --ink-soft     卡片內次要文字
+   --seal         強調色（朱印紅），用於按鈕、連結、主要重點
+   --gold         次強調色（金/蜜色），用於分隔線、標籤
+   --moss         第三強調色（青竹/苔綠），用於分類區分
+
+   圓角規則（Craft：每個值都要能被說明）：
+   --radius       方形元素統一值：卡片、輸入框、大按鈕（10px）
+   999px（藥丸）  僅用於「狀態標籤」類元素：badge、filter-chip、tag-pill
+   ========================================================== */
+
+:root {
+  --indigo: #16243f;
+  --indigo-mid: #22385f;
+  --paper: #f1ead9;
+  --paper-card: #f8f3e7;
+  --ink: #1e1b16;
+  --ink-soft: #4a4437;
+  --line-on-indigo: rgba(198, 161, 91, 0.28);
+  --line-on-paper: #e0d5b8;
+  --seal: #b23a2e;
+  --seal-dim: #8f2e24;
+  --gold: #c6a15b;
+  --moss: #4f6b52;
+  --radius: 10px;
+  --tap-min: 44px;
+
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--indigo);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(198, 161, 91, 0.06), transparent 42%),
+    radial-gradient(circle at 88% 92%, rgba(178, 58, 46, 0.07), transparent 40%);
+  color: var(--paper);
+  font-family: "Noto Sans TC", "Hiragino Sans", "Yu Gothic", -apple-system,
+    BlinkMacSystemFont, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+img { max-width: 100%; }
+
+/* 重置瀏覽器對 <button> 的預設外觀（灰底、系統字體、預設邊框），
+   否則自訂的淺色文字疊在瀏覽器預設灰底上會幾乎看不見。
+   各元件自己的 background/border 之後再各自覆寫。 */
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 所有可點擊元素的統一按下回饋（#1）：
+   在 pointer-down 瞬間就有反應，不等 release，hover 用不到的觸控裝置也吃得到。 */
+.category-card,
+.filter-chip,
+.go-link,
+.expand-toggle,
+.search-box button,
+.site-header nav button,
+.site-header .brand {
+  transition: transform 100ms ease-out, border-color 0.15s ease,
+    background 0.15s ease, color 0.15s ease;
+}
+.category-card:active,
+.filter-chip:active,
+.go-link:active,
+.expand-toggle:active,
+.search-box button:active,
+.site-header nav button:active,
+.site-header .brand:active {
+  transform: scale(0.97);
+}
+
+/* ---------- 頁首導覽 ---------- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  background: rgba(22, 36, 63, 0.94);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line-on-indigo);
+}
+
+/* #5：brand / nav 按鈕加大熱區，不再讓文字本身當唯一可點範圍 */
+.brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: var(--paper);
+  letter-spacing: 0.01em; /* #10：字級偏小，維持輕微正值即可，不套用大標題的負值邏輯 */
+  padding: 0.4rem 0.2rem;
+  margin: -0.4rem -0.2rem;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand span { color: var(--gold); }
+
+.site-header nav { display: flex; gap: 1.1rem; font-size: 0.9rem; }
+
+.site-header nav a,
+.site-header nav button {
+  position: relative;
+  text-decoration: none;
+  color: rgba(241, 234, 217, 0.6);
+  white-space: nowrap;
+  padding: 0.55rem 0.3rem;
+  margin: -0.55rem -0.3rem;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-header nav a.active,
+.site-header nav button.active {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* 底線緊貼文字，跟上面為了 44px 熱區而加的 padding 脫鉤，
+   不然底線會被拖到熱區邊界，跟文字視覺上斷開 */
+.site-header nav a.active::after,
+.site-header nav button.active::after {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  right: 0.3rem;
+  bottom: 0.42rem;
+  height: 2px;
+  background: var(--gold);
+}
+
+/* ---------- 通用容器 ---------- */
+main { max-width: 880px; margin: 0 auto; padding: 0 1.25rem 4rem; }
+
+/* ---------- 首頁 Hero ---------- */
+.hero {
+  padding: 3rem 0 2.4rem;
+  border-bottom: 1px solid var(--line-on-indigo);
+  margin-bottom: 2.2rem;
+}
+
+.hero h1 {
+  font-family: "Noto Serif JP", "Noto Sans TC", serif;
+  font-size: clamp(1.7rem, 6vw, 2.3rem);
+  margin: 0 0 0.7rem;
+  font-weight: 700;
+  letter-spacing: -0.015em; /* #9：大字級用負值追蹤，字母不會讀起來太鬆散 */
+  line-height: 1.15; /* #11：大標題行高收緊，body 才維持寬鬆 */
+  color: var(--paper);
+}
+
+.hero p.lead {
+  color: rgba(241, 234, 217, 0.78); /* #13：從 0.72 微調提高，配合下方統一調整 */
+  font-size: 1rem;
+  max-width: 34em;
+  margin: 0 0 1.6rem;
+}
+
+/* ---------- 搜尋框 ---------- */
+.search-box { display: flex; gap: 0.5rem; max-width: 30em; }
+
+.search-box input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  min-height: var(--tap-min);
+  border: 1.5px solid var(--line-on-indigo);
+  border-radius: var(--radius);
+  background: rgba(241, 234, 217, 0.08);
+  color: var(--paper);
+  font-family: inherit;
+}
+
+.search-box input::placeholder { color: rgba(241, 234, 217, 0.45); }
+
+.search-box input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  background: rgba(241, 234, 217, 0.12);
+}
+
+.search-box button {
+  padding: 0.75rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  min-height: var(--tap-min);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--seal);
+  color: #fff;
+  cursor: pointer;
+}
+
+.search-box button:hover { background: var(--seal-dim); }
+
+/* 資源總覽頁的搜尋框在頁面本文區，底色是米白，樣式獨立 */
+main .search-box.on-paper input {
+  background: var(--paper-card);
+  color: var(--ink);
+  border-color: var(--line-on-paper);
+}
+main .search-box.on-paper input::placeholder { color: var(--ink-soft); }
+
+/* ---------- 分類入口卡片（首頁） ---------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+  margin: 1rem 0 2.6rem;
+}
+
+.category-card {
+  display: block;
+  padding: 1.2rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--line-on-indigo);
+  border-top: 3px solid var(--line-on-indigo);
+  background: rgba(241, 234, 217, 0.06);
+  text-decoration: none;
+  color: var(--paper);
+}
+
+.category-card[data-cat="日語學習"] { border-top-color: #7fa6d6; }
+.category-card[data-cat="日語相關檢定"] { border-top-color: var(--seal); }
+.category-card[data-cat="日本留學"] { border-top-color: var(--gold); }
+.category-card[data-cat="日文閱讀與影音"] { border-top-color: var(--moss); }
+
+.category-card:hover, .category-card:focus-visible {
+  border-color: var(--gold);
+  background: rgba(198, 161, 91, 0.1);
+  outline: none;
+}
+.category-card:active {
+  background: rgba(198, 161, 91, 0.16);
+}
+.category-card[data-cat="日語學習"]:hover { border-top-color: #7fa6d6; }
+.category-card[data-cat="日語相關檢定"]:hover { border-top-color: var(--seal); }
+.category-card[data-cat="日本留學"]:hover { border-top-color: var(--gold); }
+.category-card[data-cat="日文閱讀與影音"]:hover { border-top-color: var(--moss); }
+
+.category-card .icon { font-size: 1.5rem; display: block; margin-bottom: 0.5rem; }
+.category-card .name { font-weight: 700; font-size: 1.02rem; display: block; color: var(--paper); }
+.category-card .count {
+  font-size: 0.82rem;
+  color: rgba(241, 234, 217, 0.68); /* #13：0.55 → 0.68，深靛藍底上提高可讀對比 */
+  margin-top: 0.2rem;
+  display: block;
+}
+
+section.block-title {
+  font-family: "Noto Serif JP", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  padding-top: 0.4rem;
+  color: var(--paper);
+}
+
+/* ---------- 資源總覽頁：篩選列 ---------- */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.4rem 0 1.6rem; }
+
+.filter-sublabel {
+  font-size: 0.78rem;
+  color: rgba(241, 234, 217, 0.5);
+  margin: 0 0 0.5rem;
+}
+
+/* #3：filter-chip 點擊熱區提高到 44px；#14：底色改不透明淺色，字色對比拉高 */
+.filter-chip {
+  padding: 0.55rem 0.95rem;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-on-indigo);
+  background: rgba(241, 234, 217, 0.14);
+  color: rgba(241, 234, 217, 0.88);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.filter-chip:hover {
+  border-color: var(--gold);
+}
+
+.filter-chip[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--indigo);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+.result-count {
+  font-size: 0.86rem;
+  color: rgba(241, 234, 217, 0.68); /* #13 */
+  margin-bottom: 1rem;
+}
+
+/* ---------- 資源卡片（米白和紙卡 + 朱印色系邊條） ---------- */
+.resource-list { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.resource-card {
+  border: 1px solid var(--line-on-paper);
+  border-left: 4px solid var(--seal);
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  color: var(--ink);
+  padding: 1.1rem 1.2rem;
+}
+
+.resource-card[data-cat="日語學習"] { border-left-color: var(--indigo-mid); }
+.resource-card[data-cat="日語相關檢定"] { border-left-color: var(--seal); }
+.resource-card[data-cat="日本留學"] { border-left-color: var(--gold); }
+.resource-card[data-cat="日文閱讀與影音"] { border-left-color: var(--moss); }
+
+.resource-card .top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.resource-card h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-family: "Noto Serif JP", serif;
+  color: var(--ink);
+}
+
+/* #15：badge 維持藥丸形狀（狀態標籤），全站圓角規則統一在此註記 */
+.badge {
+  flex: none;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.badge.price-free { background: #e6ede3; color: var(--moss); }
+.badge.price-partial { background: #f1e6c9; color: #8a6d1f; }
+.badge.price-paid { background: #f3ddd8; color: var(--seal-dim); }
+
+.resource-card .meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem; /* #12：0.78rem → 0.8rem，避開可讀性下限 */
+}
+
+/* #15：tag-pill 原本 6px 自成一套，統一改成藥丸形狀，跟 badge/filter-chip 同規則 */
+.tag-pill {
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background: #e9e0c8;
+  color: var(--ink-soft);
+}
+
+.resource-card .target { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.65rem; }
+
+.pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+}
+
+.pros-cons ul { margin: 0.3rem 0 0; padding-left: 1.1rem; }
+.pros-cons .label { font-weight: 600; font-size: 0.78rem; }
+.pros-cons .strengths .label { color: var(--moss); }
+.pros-cons .weaknesses .label { color: var(--seal-dim); }
+
+.resource-card .bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line-on-paper);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* 展開／收合按鈕：跟 go-link 同一列，各自獨立熱區 */
+.expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.7rem;
+  margin: -0.5rem 0 -0.5rem -0.7rem;
+  min-height: var(--tap-min);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.expand-toggle:hover { color: var(--ink); background: rgba(74, 68, 55, 0.06); }
+.expand-toggle .chevron {
+  display: inline-block;
+  transition: transform 200ms ease;
+  font-size: 0.7rem;
+}
+.expand-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+/* #4：go-link 加 padding 做出按鈕感，加大點擊熱區 */
+.go-link {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--seal);
+  white-space: nowrap;
+  padding: 0.5rem 0.7rem;
+  margin: -0.5rem -0.7rem -0.5rem 0;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+}
+.go-link:hover {
+  text-decoration: underline;
+  color: var(--seal-dim);
+  background: rgba(178, 58, 46, 0.08);
+}
+
+/* 展開面板：用 grid-template-rows 0fr → 1fr 做高度動畫，
+   不用 JS 量測高度，內容多少都能正確展開／收合。 */
+.detail-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 260ms ease;
+}
+.resource-card[data-expanded="true"] .detail-panel {
+  grid-template-rows: 1fr;
+}
+.detail-inner {
+  min-height: 0;
+  padding-top: 0.7rem;
+}
+
+.section-label {
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.fields-block { margin-bottom: 0.8rem; }
+
+.tag-pill.field-pill {
+  background: #efe2c4;
+  color: #7a5a22;
+}
+
+.field-pill-btn {
+  min-height: 2.2rem;
+  padding: 0.3rem 0.7rem;
+  transition: transform 100ms ease-out, background 0.15s ease;
+}
+.field-pill-btn:hover { background: #e6d5ab; }
+.field-pill-btn:active { transform: scale(0.94); }
+
+.pdf-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.8rem;
+  margin: 0 0 0.8rem -0.1rem;
+  min-height: var(--tap-min);
+  border-radius: 999px;
+  background: #eef2ea;
+  color: var(--moss);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pdf-link:hover { background: #e2ead0; text-decoration: underline; }
+.pdf-link:active { transform: scale(0.97); }
+
+/* 搜尋命中科系時的排名提示：永遠可見，不用展開卡片，
+   用朱印色系做出「這是重點」的視覺優先度 */
+.rank-callout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.8rem;
+  margin-bottom: 0.7rem;
+  border-radius: var(--radius);
+  background: #f7e9e6;
+  border: 1px solid #e3c4bd;
+  font-size: 0.85rem;
+  color: var(--seal-dim);
+}
+.rank-icon { font-size: 0.95rem; }
+.rank-field-name {
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--seal);
+  color: #fff;
+  font-size: 0.78rem;
+}
+.rank-value { font-weight: 600; }
+.rank-sep { color: rgba(143, 46, 36, 0.4); }
+
+/* 入學管道異動提醒：用琥珀警示色，跟排名提示的朱印紅做視覺區隔，
+   避免兩種「永遠可見」的提示混在一起分不清重點 */
+.admission-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.55rem 0.8rem;
+  margin-bottom: 0.7rem;
+  border-radius: var(--radius);
+  background: #fbf1de;
+  border: 1px solid #e8d4a3;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #7a5a1a;
+}
+.note-icon { flex: none; font-size: 0.9rem; }
+.go-link:hover {
+  text-decoration: underline;
+  color: var(--seal-dim);
+  background: rgba(178, 58, 46, 0.08);
+}
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: rgba(241, 234, 217, 0.6); }
+
+/* ---------- Footer ---------- */
+footer.site-footer {
+  text-align: center;
+  padding: 2rem 1.25rem 3rem;
+  font-size: 0.8rem;
+  color: rgba(241, 234, 217, 0.45);
+  border-top: 1px solid var(--line-on-indigo);
+}
+footer.site-footer p { margin: 0 0 0.4rem; }
+footer.site-footer p:last-child { margin-bottom: 0; }
+footer.site-footer .source-note {
+  font-size: 0.74rem;
+  color: rgba(241, 234, 217, 0.32);
+}
+
+/* ---------- RWD ---------- */
+@media (min-width: 640px) {
+  .category-grid { grid-template-columns: repeat(4, 1fr); }
+  .site-header nav { gap: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .pros-cons { grid-template-columns: 1fr; }
+  .site-header nav { font-size: 0.82rem; gap: 0.8rem; }
+}
+
+/* #8：reduced-motion 涵蓋所有有 transition/transform 的互動元素，不再只顧 .category-card */
+@media (prefers-reduced-motion: reduce) {
+  .category-card,
+  .filter-chip,
+  .go-link,
+  .expand-toggle,
+  .search-box button,
+  .site-header nav button,
+  .site-header .brand {
+    transition: none;
+  }
+  .category-card:active,
+  .filter-chip:active,
+  .go-link:active,
+  .expand-toggle:active,
+  .search-box button:active,
+  .site-header nav button:active,
+  .site-header .brand:active {
+    transform: none;
+  }
+  .detail-panel,
+  .expand-toggle .chevron {
+    transition: none;
+  }
+  .pdf-link:active {
+    transform: none;
+  }
+  .field-pill-btn {
+    transition: none;
+  }
+  .field-pill-btn:active {
+    transform: none;
+  }
+}
+
+/* 降低透明度：半透明的頁首/卡片/篩選標籤改成不透明實色，並拿掉模糊，
+   讓文字底色更穩定、不受底層滾動內容穿透影響 */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--indigo);
+    backdrop-filter: none;
+  }
+  .category-card {
+    background: #1c2c4a;
+  }
+  .search-box input {
+    background: #1c2c4a;
+  }
+  .filter-chip {
+    background: #2a3a58;
+  }
+}
+
+/* 高對比度：邊框加粗、底色更實，狀態界線更明確 */
+@media (prefers-contrast: more) {
+  .category-card,
+  .resource-card,
+  .filter-chip,
+  .search-box input {
+    border-width: 2px;
+  }
+  .filter-chip[aria-pressed="true"] {
+    outline: 2px solid var(--indigo);
+    outline-offset: -4px;
+  }
+  .site-header {
+    border-bottom-width: 2px;
+  }
+}

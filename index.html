@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>日語導航｜日本留學與日語學習資源整合平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="index.html">日語<span>導航</span></a>
+  <nav>
+    <a href="index.html" class="active">首頁</a>
+    <a href="resources.html">資源總覽</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>整理過的日語學習與留學資源，不用你自己大海撈針</h1>
+    <p class="lead">
+      這裡不提供教材，而是幫你比較各個學習網站、檢定、留學資源的優缺點、適合程度與費用，
+      讓你花時間在學習上，而不是花時間在「找資源」上。
+    </p>
+    <form id="home-search-form" class="search-box">
+      <input
+        id="home-search-input"
+        type="search"
+        placeholder="試試搜尋「JLPT」、「N2」、「檢定」..."
+        aria-label="搜尋資源"
+      />
+      <button type="submit">搜尋</button>
+    </form>
+  </section>
+
+  <section>
+    <h2 class="block-title">分類瀏覽</h2>
+    <div class="category-grid" id="category-grid">
+      <!-- 由 script.js 動態產生 -->
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>本站僅整理與比較外部資源，不代管教材內容。所有資訊請以各官方網站公告為準。</p>
+  <p class="source-note">大學偏差值區間資料來源：河合塾 Kei-Net　2027年度　一般選拔。</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  initHomePage();
+</script>
+</body>
+</html>
