@@ -1,0 +1,183 @@
+/* 沿用日語導航色票：藍染 × 朱印 */
+:root{
+  --indigo:#16243f; --indigo-mid:#22385f; --paper:#f1ead9; --paper-card:#f8f3e7;
+  --ink-dark:#1e1b16; --ink-soft:#4a4437; --line-on-paper:#e0d5b8;
+  --seal:#b23a2e; --seal-dim:#8f2e24; --gold:#c6a15b; --moss:#4f6b52; --learn-blue:#7fa6d6;
+  --radius:10px; --tap-min:44px;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  /* 目前所在大類別（由 JS 切換） */
+  --bg:var(--indigo); --ink:var(--paper); --accent:var(--learn-blue); --on:var(--indigo);
+  --search-top:61dvh;
+  --glass-fill:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,0) 42%),rgba(12,18,34,.46);
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--bg)}
+body{font-family:"Noto Sans TC","Hiragino Sans","Yu Gothic",-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);
+     line-height:1.65;-webkit-font-smoothing:antialiased;transition:background .5s}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-appearance:none;appearance:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--radius)}
+
+/* 滿版大類別 */
+.stage{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
+.stage::-webkit-scrollbar{display:none}
+.cat{position:relative;height:100dvh;scroll-snap-align:start;overflow:hidden;background:var(--c-bg);
+     background-image:radial-gradient(circle at 12% 8%,rgba(198,161,91,.10),transparent 42%),
+                      radial-gradient(circle at 88% 92%,rgba(178,58,46,.10),transparent 40%)}
+.giant{position:absolute;right:5vw;top:3dvh;writing-mode:vertical-rl;white-space:nowrap;user-select:none;pointer-events:none;
+       font-family:"Noto Serif JP","Noto Serif TC",serif;font-weight:700;line-height:1;letter-spacing:.02em;
+       font-size:min(23dvh,21vw);color:var(--c-tone)}
+
+.intro{position:absolute;left:max(5vw,20px);top:96px;max-width:min(32ch,58vw);color:var(--c-ink)}
+.intro h2{font-family:"Noto Serif JP","Noto Serif TC",serif;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:700;line-height:1.15;letter-spacing:-.015em}
+.intro .lead{margin-top:.7rem;font-size:1rem;max-width:30em}
+.facts{margin-top:1rem;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.86rem}
+.facts .count{margin-right:.2rem}
+/* 狀態標籤才用藥丸（沿用站內規則） */
+.pill{display:inline-flex;align-items:center;padding:.18rem .6rem;border-radius:999px;font-size:.8rem;font-weight:600;white-space:nowrap}
+.pill.sub{background:color-mix(in srgb,var(--c-ink) 16%,transparent);color:var(--c-ink)}
+.pill.price-free{background:#e6ede3;color:var(--moss)}
+.pill.price-partial{background:#f1e6c9;color:#8a6d1f}
+.pill.price-paid{background:#f3ddd8;color:var(--seal-dim)}
+
+/* 小類別：不加框，用大字、數量與底線表達；數據全來自資源資料 */
+.subs{position:absolute;left:50%;transform:translateX(-50%);bottom:max(26px,env(safe-area-inset-bottom));
+      width:min(960px,94vw);display:flex;justify-content:space-between;gap:10px;overflow-x:auto;scrollbar-width:none;padding:6px 4px 0}
+.subs::-webkit-scrollbar{display:none}
+.subs.empty{justify-content:center;color:var(--c-ink);font-size:.95rem;padding-bottom:18px}
+.rail-btn{position:relative;flex:1 0 92px;min-height:var(--tap-min);display:flex;flex-direction:column;align-items:center;gap:3px;
+     padding:6px 6px 14px;color:var(--c-ink);transition:transform 100ms ease-out}
+.rail-btn .g{font-family:"Noto Serif JP","Noto Serif TC",serif;font-weight:700;font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.15;
+        color:var(--c-ink);opacity:.86;transition:color .2s,opacity .2s;white-space:nowrap}
+.rail-btn .l{font-size:.8rem;text-align:center;line-height:1.35;max-width:9em}
+.rail-btn::after{content:"";position:absolute;left:20%;right:20%;bottom:0;height:2px;background:var(--c-accent);transform:scaleX(0);transition:transform .25s var(--ease)}
+.rail-btn:hover .g{opacity:1}
+.rail-btn:active{transform:scale(.97)}
+.rail-btn[aria-pressed="true"] .g{color:var(--c-accent);opacity:1}
+.rail-btn[aria-pressed="true"]::after{transform:scaleX(1)}
+
+/* 頂部導覽（沿用站內 header：品牌 + 底線式分頁） */
+.top{position:fixed;inset:0 0 auto 0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:1rem;
+     padding:max(.6rem,env(safe-area-inset-top)) max(5vw,20px) 0;pointer-events:none;color:var(--ink);transition:color .4s}
+.top>*{pointer-events:auto}
+.brand{font-weight:700;font-size:1.05rem;letter-spacing:.01em;min-height:var(--tap-min);display:inline-flex;align-items:center}
+.brand span{color:var(--accent);transition:color .4s}
+.tabs{display:flex;gap:1.1rem;font-size:.9rem}
+.tabs button{position:relative;min-height:var(--tap-min);padding:0 .1rem;white-space:nowrap;color:var(--ink);transition:transform 100ms ease-out}
+.tabs button:active{transform:scale(.97)}
+.tabs button[aria-current="true"]{font-weight:700}
+.tabs button[aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:.5rem;height:2px;background:var(--accent)}
+
+/* 漂浮液態玻璃搜尋 */
+.search{position:fixed;z-index:7;left:50%;top:var(--search-top);width:min(580px,90vw);height:62px;transform:translate(-50%,-50%);
+  display:flex;align-items:center;gap:10px;padding:0 9px 0 18px;border-radius:var(--radius);color:var(--ink);
+  transition:width .45s var(--ease),color .4s,opacity .2s var(--ease)}
+.search:focus-within{width:min(680px,94vw)}
+.glass{
+  background:var(--glass-fill);
+  -webkit-backdrop-filter:blur(14px) saturate(1.6);backdrop-filter:blur(14px) saturate(1.6);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),inset 0 -1.5px 0 rgba(255,255,255,.16),inset 0 0 22px rgba(255,255,255,.12),
+             0 22px 44px rgba(0,0,0,.26),0 4px 10px rgba(0,0,0,.14);
+}
+.glass.lens{-webkit-backdrop-filter:url(#lens) blur(1.5px) saturate(1.7) brightness(1.06);backdrop-filter:url(#lens) blur(1.5px) saturate(1.7) brightness(1.06)}
+/* 滑動時搜尋框（與其結果）先淡出，停下後再浮回來 */
+.search,.results{transition:opacity .2s var(--ease)}
+.search.moving,.results.moving{opacity:0;pointer-events:none;transition-duration:.1s}
+.search svg{flex:none}
+.search input{flex:1;min-width:0;height:100%;background:none;border:0;outline:0;color:inherit;font:500 1rem "Noto Sans TC",sans-serif}
+.search input::placeholder{color:inherit;opacity:.88}
+.scope{flex:none;display:flex;align-items:center;gap:.3rem;min-height:36px;padding:0 .8rem;border-radius:999px;font-size:.85rem;font-weight:700;
+       background:var(--accent);color:var(--on);transition:transform 100ms ease-out;position:relative}
+.scope::before{content:"";position:absolute;inset:-4px -2px}
+.scope:active{transform:scale(.97)}
+.scope[hidden]{display:none}
+.go{flex:none;min-height:var(--tap-min);padding:0 1.1rem;border-radius:var(--radius);font-size:.95rem;font-weight:600;
+    background:var(--accent);color:var(--on);transition:transform 100ms ease-out,background .2s}
+.go:active{transform:scale(.97)}
+
+/* 搜尋結果：沿用站內和紙卡 */
+.results{position:fixed;z-index:6;left:50%;transform:translateX(-50%);width:min(680px,94vw);
+  bottom:calc(100dvh - var(--search-top) + 44px);max-height:calc(var(--search-top) - 44px - 88px);overflow-y:auto;scrollbar-width:none;
+  display:flex;flex-direction:column;gap:.6rem}
+.results::-webkit-scrollbar{display:none}
+.results[hidden]{display:none}
+.results .rc{font-size:.86rem;color:var(--ink);padding:0 .2rem}
+.res{background:var(--paper-card);color:var(--ink-dark);border:1px solid var(--line-on-paper);border-left:4px solid var(--seal);
+     border-radius:var(--radius);padding:.7rem 1rem;box-shadow:0 10px 24px rgba(0,0,0,.22)}
+.res[data-cat="日語學習"]{border-left-color:var(--indigo-mid)}
+.res[data-cat="日語相關檢定"]{border-left-color:var(--seal)}
+.res[data-cat="日本留學"]{border-left-color:var(--gold)}
+.res[data-cat="日文閱讀與影音"]{border-left-color:var(--moss)}
+.res{display:block;width:100%;text-align:left;cursor:pointer;transition:transform 100ms ease-out,border-color .15s}
+.res:hover{border-color:var(--gold)}
+.res:active{transform:scale(.985)}
+.res .name{font-family:"Noto Serif JP","Noto Serif TC",serif;font-size:1rem;font-weight:700;line-height:1.4}
+.res .row{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem}
+.res .meta{margin-top:.35rem;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;font-size:.8rem;color:var(--ink-soft)}
+.res .pill.sub{background:#e9e0c8;color:var(--ink-soft)}
+.res .pill{flex:none}
+.empty-state{background:var(--paper-card);color:var(--ink-soft);border-radius:var(--radius);padding:1rem;font-size:.9rem;text-align:center}
+
+
+/* 詳細資訊面板（沿用站內和紙卡配色） */
+dialog.detail{border:0;padding:0;background:transparent;color:var(--ink-dark);width:min(660px,94vw);max-height:86dvh;margin:auto;overflow:visible}
+dialog.detail :focus-visible{outline-color:var(--indigo)}
+dialog.detail::backdrop{background:rgba(22,36,63,.62);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.sheet{background:var(--paper-card);border:1px solid var(--line-on-paper);border-left:4px solid var(--seal);border-radius:var(--radius);
+       max-height:86dvh;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.4)}
+.sheet[data-cat="日語學習"]{border-left-color:var(--indigo-mid)}
+.sheet[data-cat="日語相關檢定"]{border-left-color:var(--seal)}
+.sheet[data-cat="日本留學"]{border-left-color:var(--gold)}
+.sheet[data-cat="日文閱讀與影音"]{border-left-color:var(--moss)}
+.sheet-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
+            padding:1.1rem 1.2rem .8rem;background:var(--paper-card);border-bottom:1px solid var(--line-on-paper)}
+.sheet-head h2{font-family:"Noto Serif JP","Noto Serif TC",serif;font-size:1.4rem;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+.sheet-head .meta{margin-top:.45rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.close{flex:none;width:var(--tap-min);height:var(--tap-min);margin:-.4rem -.5rem 0 0;border-radius:var(--radius);display:grid;place-items:center;color:var(--ink-soft);transition:background .15s,transform 100ms ease-out}
+.close:hover{background:rgba(74,68,55,.08)}
+.close:active{transform:scale(.95)}
+.sheet-body{padding:1rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:1.1rem}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.kv .big{font-family:"Noto Serif JP","Noto Serif TC",serif;font-size:1.7rem;font-weight:700;line-height:1.1;color:var(--ink-dark)}
+.lab{font-weight:600;font-size:.78rem;color:var(--ink-soft);margin-bottom:.35rem}
+.note-src{font-size:.74rem;color:var(--ink-soft);margin-top:.3rem}
+.sheet p.txt{font-size:.9rem;color:var(--ink-dark)}
+.tags-row{display:flex;flex-wrap:wrap;gap:.4rem}
+.sheet .tag{padding:.18rem .6rem;border-radius:999px;background:#e9e0c8;color:var(--ink-soft);font-size:.8rem}
+.sheet .tag.field{background:#efe2c4;color:#7a5a22}
+.qs{display:grid;grid-template-columns:1fr auto auto;column-gap:1rem;row-gap:.1rem;font-size:.88rem}
+.qs>*{padding:.4rem 0;border-bottom:1px solid var(--line-on-paper)}
+.qs .h{font-size:.76rem;font-weight:600;color:var(--ink-soft);padding-top:0}
+.qs .r{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.qs .top3{color:var(--seal-dim)}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;font-size:.88rem}
+.pc ul{margin:.1rem 0 0;padding-left:1.1rem}
+.pc .p .lab{color:var(--moss)} .pc .c .lab{color:var(--seal-dim)}
+.amber{display:flex;gap:.5rem;padding:.6rem .8rem;border-radius:var(--radius);background:#fbf1de;border:1px solid #e8d4a3;font-size:.84rem;line-height:1.5;color:#7a5a1a}
+.links{display:flex;flex-wrap:wrap;gap:.6rem;padding-top:.9rem;border-top:1px solid var(--line-on-paper)}
+.btn{display:inline-flex;align-items:center;min-height:var(--tap-min);padding:0 1.1rem;border-radius:var(--radius);font-size:.92rem;font-weight:600;text-decoration:none;transition:transform 100ms ease-out,background .15s}
+.btn:active{transform:scale(.97)}
+.btn.main{background:var(--seal);color:#fff}.btn.main:hover{background:var(--seal-dim)}
+.btn.line{background:#eef2ea;color:var(--moss)}.btn.line:hover{background:#e2ead0}
+@media (prefers-reduced-motion:no-preference){
+  dialog.detail[open] .sheet{animation:pop .22s var(--ease) both}
+  @keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+@media (max-width:520px){.kv,.pc{grid-template-columns:1fr}}
+
+/* 進場：只有一個編排好的時刻 */
+@media (prefers-reduced-motion:no-preference){
+  .cat:first-child .giant{animation:wipe 1.1s var(--ease) both}
+  .search{animation:rise .9s .5s var(--ease) backwards}
+  @keyframes wipe{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+  @keyframes rise{from{opacity:0;transform:translate(-50%,-30%)}to{opacity:1;transform:translate(-50%,-50%)}}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-transparency:reduce){.glass{background:color-mix(in srgb,var(--bg) 82%,white);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media (max-height:600px){.intro .lead,.facts{display:none}.search{--search-top:66dvh}}
+@media (max-width:640px){
+  .tabs{gap:.8rem;font-size:.82rem}
+  .intro{top:84px;max-width:62vw}
+  .subs{justify-content:flex-start;gap:14px}
+  .search{height:58px}
+  .go{padding:0 .85rem}
+}

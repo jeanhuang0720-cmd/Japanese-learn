@@ -1,28 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>日語導航｜日本留學與日語學習資源整合平台</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日語導航 首頁實驗預覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="lens" filterUnits="userSpaceOnUse" x="0" y="0" width="580" height="62" color-interpolation-filters="sRGB">
-    <feImage id="lensMap" x="0" y="0" width="580" height="62" preserveAspectRatio="none" result="map" />
-    <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G" />
+    <feImage id="lensMap" x="0" y="0" width="580" height="62" preserveAspectRatio="none" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 </svg>
 
 <header class="top">
-  <div class="brand-group">
-    <span class="brand">日語<span>導航</span></span>
-    <a class="all-link" href="resources.html">資源總覽 ↗</a>
-  </div>
+  <div class="brand">日語<span>導航</span></div>
   <nav class="tabs" id="tabs" aria-label="切換分類"></nav>
 </header>
 
@@ -33,16 +30,13 @@
 <dialog class="detail" id="detail" aria-labelledby="d-title"></dialog>
 
 <form class="search glass" id="search" role="search">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.6-3.6" /></svg>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
   <button type="button" class="scope" id="scope" hidden></button>
-  <input id="q" type="search" autocomplete="off" aria-label="搜尋資源" />
+  <input id="q" type="search" autocomplete="off" aria-label="搜尋資源">
   <button type="submit" class="go">搜尋</button>
 </form>
 
 <script src="data.js"></script>
-<script src="script.js"></script>
-<script>
-  initHomePage();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
