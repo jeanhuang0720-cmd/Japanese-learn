@@ -6,49 +6,38 @@
 <title>日語導航｜日本留學與日語學習資源整合平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="site-header">
-  <a class="brand" href="index.html">日語<span>導航</span></a>
-  <nav>
-    <a href="index.html" class="active">首頁</a>
-    <a href="resources.html">資源總覽</a>
-  </nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lens" filterUnits="userSpaceOnUse" x="0" y="0" width="580" height="62" color-interpolation-filters="sRGB">
+    <feImage id="lensMap" x="0" y="0" width="580" height="62" preserveAspectRatio="none" result="map" />
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
+
+<header class="top">
+  <div class="brand-group">
+    <span class="brand">日語<span>導航</span></span>
+    <a class="all-link" href="resources.html">資源總覽 ↗</a>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="切換分類"></nav>
 </header>
 
-<main>
-  <section class="hero">
-    <h1>整理過的日語學習與留學資源，不用你自己大海撈針</h1>
-    <p class="lead">
-      這裡不提供教材，而是幫你比較各個學習網站、檢定、留學資源的優缺點、適合程度與費用，
-      讓你花時間在學習上，而不是花時間在「找資源」上。
-    </p>
-    <form id="home-search-form" class="search-box">
-      <input
-        id="home-search-input"
-        type="search"
-        placeholder="試試搜尋「JLPT」、「N2」、「檢定」..."
-        aria-label="搜尋資源"
-      />
-      <button type="submit">搜尋</button>
-    </form>
-  </section>
+<main class="stage" id="stage" tabindex="0" aria-label="分類瀏覽"></main>
 
-  <section>
-    <h2 class="block-title">分類瀏覽</h2>
-    <div class="category-grid" id="category-grid">
-      <!-- 由 script.js 動態產生 -->
-    </div>
-  </section>
-</main>
+<div class="results" id="results" hidden aria-live="polite"></div>
 
-<footer class="site-footer">
-  <p>本站僅整理與比較外部資源，不代管教材內容。所有資訊請以各官方網站公告為準。</p>
-  <p class="source-note">大學偏差值區間資料來源：河合塾 Kei-Net　2027年度　一般選拔。</p>
-</footer>
+<dialog class="detail" id="detail" aria-labelledby="d-title"></dialog>
+
+<form class="search glass" id="search" role="search">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.6-3.6" /></svg>
+  <button type="button" class="scope" id="scope" hidden></button>
+  <input id="q" type="search" autocomplete="off" aria-label="搜尋資源" />
+  <button type="submit" class="go">搜尋</button>
+</form>
 
 <script src="data.js"></script>
 <script src="script.js"></script>

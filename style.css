@@ -659,3 +659,396 @@ footer.site-footer .source-note {
     border-bottom-width: 2px;
   }
 }
+
+/* ==========================================================
+   首頁：滿版大類別（index.html 專用）
+   --stage-bg / --stage-ink / --stage-accent / --stage-on
+   由 JS 依目前捲動到的大類別切換，跟全站既有的
+   --ink（和紙卡文字色）互相獨立，避免互相覆蓋。
+   ========================================================== */
+:root {
+  --stage-bg: var(--indigo);
+  --stage-ink: var(--paper);
+  --stage-accent: #7fa6d6;
+  --stage-on: var(--indigo);
+  --search-top: 61dvh;
+  --stage-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 42%), rgba(12, 18, 34, 0.46);
+}
+
+.stage,
+.search,
+dialog.detail,
+header.top {
+  --ignore: 0; /* 僅作用域標記，無視覺效果 */
+}
+.stage :focus-visible,
+.search :focus-visible,
+dialog.detail :focus-visible,
+header.top :focus-visible {
+  outline: 2px solid var(--stage-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+
+html:has(.stage) body { background: var(--stage-bg); transition: background 0.5s; }
+
+.stage {
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+.stage::-webkit-scrollbar { display: none; }
+
+.cat {
+  position: relative;
+  height: 100dvh;
+  scroll-snap-align: start;
+  overflow: hidden;
+  background: var(--c-bg);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(198, 161, 91, 0.1), transparent 42%),
+    radial-gradient(circle at 88% 92%, rgba(178, 58, 46, 0.1), transparent 40%);
+}
+
+.giant {
+  position: absolute;
+  right: 5vw;
+  top: 3dvh;
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  font-family: "Noto Serif JP", "Noto Serif TC", serif;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-size: min(23dvh, 21vw);
+  color: var(--c-tone);
+}
+
+.intro { position: absolute; left: max(5vw, 20px); top: 96px; max-width: min(32ch, 58vw); color: var(--c-ink); }
+.intro h2 {
+  font-family: "Noto Serif JP", "Noto Serif TC", serif;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.intro .lead { margin-top: 0.7rem; font-size: 1rem; max-width: 30em; }
+.facts { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.86rem; }
+.facts .count { margin-right: 0.2rem; }
+
+/* 狀態標籤沿用全站規則：僅狀態標籤用藥丸 */
+.intro .pill.sub { background: color-mix(in srgb, var(--c-ink) 16%, transparent); color: var(--c-ink); padding: 0.18rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; }
+
+/* 小類別導覽列：不加框，用大字、數量與底線表達 */
+.subs {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(26px, env(safe-area-inset-bottom));
+  width: min(960px, 94vw);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 6px 4px 0;
+  margin: 0;
+  list-style: none;
+}
+.subs::-webkit-scrollbar { display: none; }
+.subs.empty { justify-content: center; color: var(--c-ink); font-size: 0.95rem; padding-bottom: 18px; opacity: 0.8; }
+.rail-btn {
+  position: relative;
+  flex: 1 0 92px;
+  min-height: var(--tap-min);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 6px 14px;
+  color: var(--c-ink);
+  transition: transform 100ms ease-out;
+}
+.rail-btn .g {
+  font-family: "Noto Serif JP", "Noto Serif TC", serif;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3.2vw, 2rem);
+  line-height: 1.15;
+  color: var(--c-ink);
+  opacity: 0.86;
+  transition: color 0.2s, opacity 0.2s;
+  white-space: nowrap;
+}
+.rail-btn .l { font-size: 0.8rem; text-align: center; line-height: 1.35; max-width: 9em; }
+.rail-btn::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transition: transform 0.25s cubic-bezier(.22,.8,.24,1);
+}
+.rail-btn:hover .g { opacity: 1; }
+.rail-btn:active { transform: scale(0.97); }
+.rail-btn[aria-pressed="true"] .g { color: var(--c-accent); opacity: 1; }
+.rail-btn[aria-pressed="true"]::after { transform: scaleX(1); }
+
+/* 頂部導覽：品牌 + 分類分頁 + 回資源總覽連結 */
+header.top {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: max(0.6rem, env(safe-area-inset-top)) max(5vw, 20px) 0;
+  pointer-events: none;
+  color: var(--stage-ink);
+  transition: color 0.4s;
+}
+header.top > * { pointer-events: auto; }
+header.top .brand-group { display: flex; align-items: center; gap: 1.2rem; }
+header.top .brand { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; min-height: var(--tap-min); display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+header.top .brand span { color: var(--stage-accent); transition: color 0.4s; }
+header.top .all-link {
+  font-size: 0.85rem;
+  color: var(--stage-ink);
+  opacity: 0.78;
+  text-decoration: none;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.3rem;
+  transition: opacity 0.2s, transform 100ms ease-out;
+}
+header.top .all-link:hover { opacity: 1; }
+header.top .all-link:active { transform: scale(0.97); }
+.tabs { display: flex; gap: 1.1rem; font-size: 0.9rem; }
+.tabs button {
+  position: relative;
+  min-height: var(--tap-min);
+  padding: 0 0.1rem;
+  white-space: nowrap;
+  color: var(--stage-ink);
+  transition: transform 100ms ease-out;
+}
+.tabs button:active { transform: scale(0.97); }
+.tabs button[aria-current="true"] { font-weight: 700; }
+.tabs button[aria-current="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.5rem; height: 2px; background: var(--stage-accent); }
+
+/* 漂浮液態玻璃搜尋框 */
+.search {
+  position: fixed;
+  z-index: 7;
+  left: 50%;
+  top: var(--search-top);
+  width: min(580px, 90vw);
+  height: 62px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 9px 0 18px;
+  border-radius: var(--radius);
+  color: var(--stage-ink);
+  transition: width 0.45s cubic-bezier(.22,.8,.24,1), color 0.4s, opacity 0.2s cubic-bezier(.22,.8,.24,1);
+}
+.search:focus-within { width: min(680px, 94vw); }
+.search.glass {
+  background: var(--stage-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1.5px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 22px rgba(255, 255, 255, 0.12),
+    0 22px 44px rgba(0, 0, 0, 0.26),
+    0 4px 10px rgba(0, 0, 0, 0.14);
+}
+.search.glass.lens {
+  -webkit-backdrop-filter: url(#lens) blur(1.5px) saturate(1.7) brightness(1.06);
+  backdrop-filter: url(#lens) blur(1.5px) saturate(1.7) brightness(1.06);
+}
+/* 滑動時搜尋框（與結果）先淡出，停下後再浮回來，而不是瞬間消失/出現造成閃爍 */
+.search, .results { transition: opacity 0.2s cubic-bezier(.22,.8,.24,1); }
+.search.moving, .results.moving { opacity: 0; pointer-events: none; transition-duration: 0.1s; }
+.search svg { flex: none; }
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: none;
+  border: 0;
+  outline: 0;
+  color: inherit;
+  font: 500 1rem "Noto Sans TC", sans-serif;
+}
+.search input::placeholder { color: inherit; opacity: 0.88; }
+.scope {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 36px;
+  padding: 0 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--stage-accent);
+  color: var(--stage-on);
+  transition: transform 100ms ease-out;
+  position: relative;
+}
+.scope::before { content: ""; position: absolute; inset: -4px -2px; }
+.scope:active { transform: scale(0.97); }
+.scope[hidden] { display: none; }
+.go {
+  flex: none;
+  min-height: var(--tap-min);
+  padding: 0 1.1rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--stage-accent);
+  color: var(--stage-on);
+  transition: transform 100ms ease-out, background 0.2s;
+}
+.go:active { transform: scale(0.97); }
+
+/* 搜尋結果：沿用站內和紙卡 */
+.results {
+  position: fixed;
+  z-index: 6;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 94vw);
+  bottom: calc(100dvh - var(--search-top) + 44px);
+  max-height: calc(var(--search-top) - 44px - 88px);
+  overflow-y: auto;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.results::-webkit-scrollbar { display: none; }
+.results[hidden] { display: none; }
+.results .rc { font-size: 0.86rem; color: var(--stage-ink); padding: 0 0.2rem; margin: 0; }
+.res {
+  background: var(--paper-card);
+  color: var(--ink);
+  border: 1px solid var(--line-on-paper);
+  border-left: 4px solid var(--seal);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  display: block;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 100ms ease-out, border-color 0.15s;
+}
+.res[data-cat="日語學習"] { border-left-color: var(--indigo-mid); }
+.res[data-cat="日語相關檢定"] { border-left-color: var(--seal); }
+.res[data-cat="日本留學"] { border-left-color: var(--gold); }
+.res[data-cat="日文閱讀與影音"] { border-left-color: var(--moss); }
+.res:hover { border-color: var(--gold); }
+.res:active { transform: scale(0.985); }
+.res .name { font-family: "Noto Serif JP", "Noto Serif TC", serif; font-size: 1rem; font-weight: 700; line-height: 1.4; }
+.res .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.8rem; }
+.res .meta { margin-top: 0.35rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--ink-soft); }
+.res .pill.sub { padding: 0.18rem 0.6rem; border-radius: 999px; background: #e9e0c8; color: var(--ink-soft); }
+.res .badge { flex: none; }
+
+/* 詳細資訊面板（原生 dialog，沿用站內和紙卡配色） */
+dialog.detail { border: 0; padding: 0; background: transparent; color: var(--ink); width: min(660px, 94vw); max-height: 86dvh; margin: auto; overflow: visible; }
+dialog.detail::backdrop { background: rgba(22, 36, 63, 0.62); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.sheet { background: var(--paper-card); border: 1px solid var(--line-on-paper); border-left: 4px solid var(--seal); border-radius: var(--radius); max-height: 86dvh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); }
+.sheet[data-cat="日語學習"] { border-left-color: var(--indigo-mid); }
+.sheet[data-cat="日語相關檢定"] { border-left-color: var(--seal); }
+.sheet[data-cat="日本留學"] { border-left-color: var(--gold); }
+.sheet[data-cat="日文閱讀與影音"] { border-left-color: var(--moss); }
+.sheet-head { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.2rem 0.8rem; background: var(--paper-card); border-bottom: 1px solid var(--line-on-paper); }
+.sheet-head h2 { font-family: "Noto Serif JP", "Noto Serif TC", serif; font-size: 1.4rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; margin: 0; }
+.sheet-head .meta { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sheet .close {
+  flex: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin: -0.4rem -0.5rem 0 0;
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  transition: background 0.15s, transform 100ms ease-out;
+}
+.sheet .close:hover { background: rgba(74, 68, 55, 0.08); }
+.sheet .close:active { transform: scale(0.95); }
+.sheet-body { padding: 1rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 1.1rem; }
+.sheet .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.sheet .kv .big { font-family: "Noto Serif JP", "Noto Serif TC", serif; font-size: 1.7rem; font-weight: 700; line-height: 1.1; color: var(--ink); }
+.sheet .lab { font-weight: 600; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 0.35rem; }
+.sheet .note-src { font-size: 0.74rem; color: var(--ink-soft); margin-top: 0.3rem; }
+.sheet p.txt { font-size: 0.9rem; color: var(--ink); margin: 0; }
+.sheet .tags-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.sheet .tag { padding: 0.18rem 0.6rem; border-radius: 999px; background: #e9e0c8; color: var(--ink-soft); font-size: 0.8rem; }
+.sheet .tag.field { background: #efe2c4; color: #7a5a22; }
+.sheet .qs { display: grid; grid-template-columns: 1fr auto auto; column-gap: 1rem; row-gap: 0.1rem; font-size: 0.88rem; }
+.sheet .qs > * { padding: 0.4rem 0; border-bottom: 1px solid var(--line-on-paper); }
+.sheet .qs .h { font-size: 0.76rem; font-weight: 600; color: var(--ink-soft); padding-top: 0; }
+.sheet .qs .r { font-variant-numeric: tabular-nums; text-align: right; font-weight: 600; }
+.sheet .qs .top3 { color: var(--seal-dim); }
+.sheet .pc { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; font-size: 0.88rem; }
+.sheet .pc ul { margin: 0.1rem 0 0; padding-left: 1.1rem; }
+.sheet .pc .p .lab { color: var(--moss); }
+.sheet .pc .c .lab { color: var(--seal-dim); }
+.sheet .amber { display: flex; gap: 0.5rem; padding: 0.6rem 0.8rem; border-radius: var(--radius); background: #fbf1de; border: 1px solid #e8d4a3; font-size: 0.84rem; line-height: 1.5; color: #7a5a1a; }
+.sheet .links { display: flex; flex-wrap: wrap; gap: 0.6rem; padding-top: 0.9rem; border-top: 1px solid var(--line-on-paper); }
+.sheet .btn { display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 1.1rem; border-radius: var(--radius); font-size: 0.92rem; font-weight: 600; text-decoration: none; transition: transform 100ms ease-out, background 0.15s; }
+.sheet .btn:active { transform: scale(0.97); }
+.sheet .btn.main { background: var(--seal); color: #fff; }
+.sheet .btn.main:hover { background: var(--seal-dim); }
+.sheet .btn.line { background: #eef2ea; color: var(--moss); }
+.sheet .btn.line:hover { background: #e2ead0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.detail[open] .sheet { animation: stage-pop 0.22s cubic-bezier(.22,.8,.24,1) both; }
+  @keyframes stage-pop { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}
+@media (max-width: 520px) { .sheet .kv, .sheet .pc { grid-template-columns: 1fr; } }
+
+/* 進場：只有一個編排好的時刻，用 animation-fill-mode:backwards
+   讓搜尋框在延遲期間就先套用 0% 的樣式（opacity:0），
+   不會在動畫開始前先閃一下「完整不透明」的畫面。 */
+@media (prefers-reduced-motion: no-preference) {
+  .cat:first-child .giant { animation: stage-wipe 1.1s cubic-bezier(.22,.8,.24,1) both; }
+  .search { animation: stage-rise 0.9s 0.5s cubic-bezier(.22,.8,.24,1) backwards; }
+  @keyframes stage-wipe { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  @keyframes stage-rise { from { opacity: 0; transform: translate(-50%, -30%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .search.glass { background: color-mix(in srgb, var(--stage-bg) 82%, white); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (max-height: 600px) { .intro .lead, .facts { display: none; } .search { --search-top: 66dvh; } }
+@media (max-width: 640px) {
+  .tabs { gap: 0.6rem; font-size: 0.78rem; }
+  header.top .brand-group { gap: 0.6rem; }
+  header.top .all-link { font-size: 0; }
+  header.top .all-link::before { content: "總覽 ↗"; font-size: 0.78rem; }
+  .intro { top: 84px; max-width: 62vw; }
+  .subs { justify-content: flex-start; gap: 14px; }
+  .search { height: 58px; }
+  .go { padding: 0 0.85rem; }
+}
+@media (max-width: 380px) {
+  .tabs { gap: 0.4rem; font-size: 0.72rem; }
+  header.top .all-link::before { content: "總覽"; }
+}
